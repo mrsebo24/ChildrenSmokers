@@ -1,0 +1,10 @@
+Napisz program, który odczyta plik "dzieci_palacze".
+
+Musisz napisać metody:
+1. Drukującą informację o najstarszym i najmłodszym dziecku biorącym udział w badaniu (może być void i wydruk do konsoli)
+2. Zwracającą płeć, która ma gorsze średnie wyniki FEV.
+3. Zwracającą współczynnik procentowy (np 0.5 to 50%) ile dzieci z grupy ma nawyki palacza (smoking habits)
+4. Drukującą informację (void i wydruk w konsoli) jak wygląda średni wzrost palących chłopców w porównaniu do niepalących;
+5. To samo co wyżej tylko wersja dla dziewczynek.
+6. Zwracającą najstarsze dziecko biorące udział w badaniu.
+7. Zwracającą tablicę chłopców, którzy mają nawyki palacza.
