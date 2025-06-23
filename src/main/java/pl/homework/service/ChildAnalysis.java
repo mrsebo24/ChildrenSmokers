@@ -1,8 +1,13 @@
 package pl.homework.service;
 
 import pl.homework.models.Child;
+import pl.homework.models.Sex;
+import pl.homework.models.YoungestAndOlderChild;
+
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 public class ChildAnalysis {
 
@@ -21,5 +26,26 @@ public class ChildAnalysis {
         }return nonNullChildrenList;
     }
 
+    //1. Drukującą informację o najstarszym i najmłodszym dziecku biorącym udział w badaniu (może być void i wydruk do konsoli)
+    public Optional<YoungestAndOlderChild> printOlderAndYoungestChildren(Sex sex){
+        if (children.isEmpty()) return Optional.empty();
+
+        List<Child> childrenOfOneSex = getChildrenOfOneSex(sex);
+
+        Optional<Child> olderChild = childrenOfOneSex.stream().max(Comparator.comparing(Child::getAge));
+        Optional<Child> youngestChild = childrenOfOneSex.stream().min(Comparator.comparing(Child::getAge));
+
+        if (olderChild.isEmpty() && youngestChild.isEmpty()) return Optional.empty();
+        return Optional.of(new YoungestAndOlderChild(youngestChild.get(), olderChild.get()));
+    }
+
+    private List<Child> getChildrenOfOneSex(Sex sex){
+        List<Child> childrenOfOneSex = new ArrayList<>();
+        for (Child child : children) {
+            if (child.getSex() == sex){
+                childrenOfOneSex.add(child);
+            }
+        }return childrenOfOneSex;
+    }
 
 }
