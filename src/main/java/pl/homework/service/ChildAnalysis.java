@@ -2,8 +2,11 @@ package pl.homework.service;
 
 import pl.homework.models.Child;
 import pl.homework.models.Sex;
+import pl.homework.models.Smoke;
 import pl.homework.models.YoungestAndOlderChild;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -49,6 +52,27 @@ public class ChildAnalysis {
         if (female > male){
             return Optional.of(Sex.MALE);
         }else return Optional.of(Sex.FEMALE);
+    }
+
+    //3. Zwracającą współczynnik procentowy (np 0.5 to 50%) ile dzieci z grupy ma nawyki palacza (smoking habits)
+    public Optional<Double> getRatioChildrenSmokers(){
+        if (children.isEmpty()) return Optional.empty();
+
+        List<Child> childrenSmokers = getChildrenSmokers();
+        BigDecimal bd = BigDecimal.valueOf((double) childrenSmokers.size() / children.size());
+
+        return Optional.of(bd.setScale(2, RoundingMode.HALF_UP).doubleValue());
+    }
+
+    private List<Child> getChildrenSmokers() {
+        List<Child> childrenSmokers = new ArrayList<>();
+
+        for (Child child : children) {
+            if (child.getSmoke() == Smoke.YES){
+                childrenSmokers.add(child);
+            }
+        }
+        return childrenSmokers;
     }
 
     private double getAverageFev(Sex sex) {
