@@ -5,12 +5,10 @@ import pl.homework.models.Sex;
 import pl.homework.models.Smoke;
 import pl.homework.models.YoungestAndOlderChild;
 
+import javax.swing.text.html.Option;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class ChildAnalysis {
 
@@ -71,7 +69,23 @@ public class ChildAnalysis {
     //6. Zwracającą najstarsze dziecko biorące udział w badaniu.
     public Optional<Child> getOldestChild() {
         return children.stream().max(Comparator.comparing(Child::getAge));
+    }
 
+    //7. Zwracającą tablicę chłopców, którzy mają nawyki palacza.
+    public Optional<Child[]> getMalesWhoHaveSmokes(){
+        if (children.isEmpty()) return Optional.empty();
+        List<Child> childrenOfOneSex = getChildrenOfOneSex(Sex.MALE);
+        List<Child> malesSmokers = new ArrayList<>();
+        for (Child tmp : childrenOfOneSex) {
+            if(tmp.getSmoke() == Smoke.YES){
+                malesSmokers.add(tmp);
+            }
+        }
+
+        Child[] result = new Child[malesSmokers.size()];
+        for (int i = 0; i < malesSmokers.size(); i++) {
+            result[i] = malesSmokers.get(i);
+        }return Optional.of(result);
     }
 
     private List<Child> getChildrenSmokers(List<Child> childrenOfOneSex) {
