@@ -42,6 +42,7 @@ public class ChildAnalysis {
         return Optional.of(new YoungestAndOlderChild(youngestChild.get(), olderChild.get()));
     }
 
+
     //2. Zwracającą płeć, która ma gorsze średnie wyniki FEV.
     public Optional<Sex> getSexWithWorseAverageFev(){
         if (children.isEmpty()) return Optional.empty();
@@ -55,19 +56,28 @@ public class ChildAnalysis {
     }
 
     //3. Zwracającą współczynnik procentowy (np 0.5 to 50%) ile dzieci z grupy ma nawyki palacza (smoking habits)
-    public Optional<Double> getRatioChildrenSmokers(){
+    public Optional<Double> getRatioChildrenSmokers(Sex sex){
         if (children.isEmpty()) return Optional.empty();
 
-        List<Child> childrenSmokers = getChildrenSmokers();
-        BigDecimal bd = BigDecimal.valueOf((double) childrenSmokers.size() / children.size());
+        List<Child> childrenOfOneSex = getChildrenOfOneSex(sex);
+        List<Child> childrenSmokers = getChildrenSmokers(childrenOfOneSex);
+        BigDecimal bd = BigDecimal.valueOf((double) childrenSmokers.size() / childrenOfOneSex.size());
 
         return Optional.of(bd.setScale(2, RoundingMode.HALF_UP).doubleValue());
     }
 
-    private List<Child> getChildrenSmokers() {
+    //4. Drukującą informację (void i wydruk w konsoli) jak wygląda średni wzrost palących chłopców w porównaniu do niepalących;
+
+    //6. Zwracającą najstarsze dziecko biorące udział w badaniu.
+    public Optional<Child> getOldestChild() {
+        return children.stream().max(Comparator.comparing(Child::getAge));
+
+    }
+
+    private List<Child> getChildrenSmokers(List<Child> childrenOfOneSex) {
         List<Child> childrenSmokers = new ArrayList<>();
 
-        for (Child child : children) {
+        for (Child child : childrenOfOneSex) {
             if (child.getSmoke() == Smoke.YES){
                 childrenSmokers.add(child);
             }
