@@ -28,7 +28,7 @@ public class ChildAnalysis {
     }
 
     //1. Drukującą informację o najstarszym i najmłodszym dziecku biorącym udział w badaniu (może być void i wydruk do konsoli)
-    public Optional<YoungestAndOlderChild> getOlderAndYoungestChildren(Sex sex){
+    public Optional<String> getOlderAndYoungestChildren(Sex sex){
         if (children.isEmpty()) return Optional.empty();
 
         List<Child> childrenOfOneSex = getChildrenOfOneSex(sex);
@@ -37,7 +37,7 @@ public class ChildAnalysis {
         Optional<Child> youngestChild = childrenOfOneSex.stream().min(Comparator.comparing(Child::getAge));
 
         if (olderChild.isEmpty() && youngestChild.isEmpty()) return Optional.empty();
-        return Optional.of(new YoungestAndOlderChild(youngestChild.get(), olderChild.get()));
+        return Optional.of("Youngest child: " + youngestChild.get() + ", older child: " + olderChild.get());
     }
 
 
