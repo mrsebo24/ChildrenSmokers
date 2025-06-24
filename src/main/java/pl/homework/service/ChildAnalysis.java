@@ -3,9 +3,7 @@ package pl.homework.service;
 import pl.homework.models.Child;
 import pl.homework.models.Sex;
 import pl.homework.models.Smoke;
-import pl.homework.models.YoungestAndOlderChild;
 
-import javax.swing.text.html.Option;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
@@ -65,7 +63,31 @@ public class ChildAnalysis {
     }
 
     //4. Drukującą informację (void i wydruk w konsoli) jak wygląda średni wzrost palących chłopców w porównaniu do niepalących;
-
+    public void getAverageHeightAtSmokersBoys(){
+        if (children.isEmpty()) {
+            System.out.println("Children list is null");
+        }else {
+            List<Child> childrenSmokers = getChildrenSmokers(getChildrenOfOneSex(Sex.MALE));
+            double sum = 0;
+            for (Child childrenSmoker : childrenSmokers) {
+                sum += childrenSmoker.getHeight();
+            }
+            System.out.println("Average smokers boys height: " + sum / childrenSmokers.size());
+        }
+    }
+    //5. To samo co wyżej tylko wersja dla dziewczynek.
+    public void getAverageHeightAtSmokersGirls(){
+        if (children.isEmpty()) {
+            System.out.println("Children list is null");
+        }else {
+            List<Child> childrenSmokers = getChildrenSmokers(getChildrenOfOneSex(Sex.FEMALE));
+            double sum = 0;
+            for (Child childrenSmoker : childrenSmokers) {
+                sum += childrenSmoker.getHeight();
+            }
+            System.out.println("Average smokers girls height: " + sum / childrenSmokers.size());
+        }
+    }
     //6. Zwracającą najstarsze dziecko biorące udział w badaniu.
     public Optional<Child> getOldestChild() {
         return children.stream().max(Comparator.comparing(Child::getAge));
