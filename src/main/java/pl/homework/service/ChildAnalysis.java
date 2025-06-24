@@ -3,7 +3,6 @@ package pl.homework.service;
 import pl.homework.models.Child;
 import pl.homework.models.Sex;
 import pl.homework.models.Smoke;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
