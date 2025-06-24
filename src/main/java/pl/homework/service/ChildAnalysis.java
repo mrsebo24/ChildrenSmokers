@@ -25,16 +25,13 @@ public class ChildAnalysis {
     }
 
     //1. Drukującą informację o najstarszym i najmłodszym dziecku biorącym udział w badaniu (może być void i wydruk do konsoli)
-    public Optional<String> getOlderAndYoungestChildren(Sex sex){
+    public Optional<String> getOlderAndYoungestChildren(){
         if (children.isEmpty()) return Optional.empty();
 
-        List<Child> childrenOfOneSex = getChildrenOfOneSex(sex);
+        Child olderChild = children.stream().max(Comparator.comparing(Child::getAge)).get();
+        Child youngestChild = children.stream().min(Comparator.comparing(Child::getAge)).get();
 
-        Optional<Child> olderChild = childrenOfOneSex.stream().max(Comparator.comparing(Child::getAge));
-        Optional<Child> youngestChild = childrenOfOneSex.stream().min(Comparator.comparing(Child::getAge));
-
-        if (olderChild.isEmpty() && youngestChild.isEmpty()) return Optional.empty();
-        return Optional.of("Youngest child: " + youngestChild.get() + ", older child: " + olderChild.get());
+        return Optional.of("Youngest child: " + youngestChild + ", older child: " + olderChild);
     }
 
 
@@ -51,12 +48,11 @@ public class ChildAnalysis {
     }
 
     //3. Zwracającą współczynnik procentowy (np 0.5 to 50%) ile dzieci z grupy ma nawyki palacza (smoking habits)
-    public Optional<Double> getRatioChildrenSmokers(Sex sex){
+    public Optional<Double> getRatioChildrenSmokers(){
         if (children.isEmpty()) return Optional.empty();
 
-        List<Child> childrenOfOneSex = getChildrenOfOneSex(sex);
-        List<Child> childrenSmokers = getChildrenSmokers(childrenOfOneSex);
-        BigDecimal bd = BigDecimal.valueOf((double) childrenSmokers.size() / childrenOfOneSex.size());
+        List<Child> childrenSmokers = getChildrenSmokers(children);
+        BigDecimal bd = BigDecimal.valueOf((double) childrenSmokers.size() / children.size());
 
         return Optional.of(bd.setScale(2, RoundingMode.HALF_UP).doubleValue());
     }
