@@ -28,39 +28,43 @@ public class ChildAnalysis {
     public Optional<String> getOlderAndYoungestChildren(){
         if (children.isEmpty()) return Optional.empty();
 
-        Child olderChild = children.stream().max(Comparator.comparing(Child::getAge)).get();
-        Child youngestChild = children.stream().min(Comparator.comparing(Child::getAge)).get();
+
+        /// theOldestChild
+        Child olderChild = getTheOldestChild();
+        /// theYoungestChild
+        Child youngestChild = getTheYoungestChild();
 
         return Optional.of("Youngest child: " + youngestChild + ", older child: " + olderChild);
     }
+    /// napisz dwie prywatne metody obi emaja zwracac child tylko jedna najstarsze a jedna najmlodsze
 
 
     //2. Zwracającą płeć, która ma gorsze średnie wyniki FEV.
-    public Optional<Sex> getSexWithWorseAverageFev(){
-        if (children.isEmpty()) return Optional.empty();
+    public Sex getSexWithWorseAverageFev(){
+        if (children.isEmpty()) return null;
 
-        double female = getAverageFev(Sex.FEMALE);
-        double male = getAverageFev(Sex.MALE);
+        double femalesFev = getAverageFev(Sex.FEMALE);
+        double malesFev = getAverageFev(Sex.MALE);
 
-        if (female > male){
-            return Optional.of(Sex.MALE);
-        }else return Optional.of(Sex.FEMALE);
+        if (femalesFev > malesFev){
+            return Sex.MALE;
+        }else return Sex.FEMALE;
     }
 
     //3. Zwracającą współczynnik procentowy (np 0.5 to 50%) ile dzieci z grupy ma nawyki palacza (smoking habits)
-    public Optional<Double> getRatioChildrenSmokers(){
-        if (children.isEmpty()) return Optional.empty();
+    public BigDecimal getRatioChildrenSmokers(){
+        if (children.isEmpty()) return BigDecimal.ZERO;
 
         List<Child> childrenSmokers = getChildrenSmokers(children);
         BigDecimal bd = BigDecimal.valueOf((double) childrenSmokers.size() / children.size());
 
-        return Optional.of(bd.setScale(2, RoundingMode.HALF_UP).doubleValue());
+        return bd.setScale(2, RoundingMode.HALF_UP);
     }
 
     //4. Drukującą informację (void i wydruk w konsoli) jak wygląda średni wzrost palących chłopców w porównaniu do niepalących;
     public void getAverageHeightAtSmokersBoys(){
         if (children.isEmpty()) {
-            System.out.println("Children list is null");
+            System.out.println("Children list is empty");
         }else {
             List<Child> childrenSmokers = getChildrenSmokers(getChildrenOfOneSex(Sex.MALE));
             double sum = 0;
@@ -89,8 +93,9 @@ public class ChildAnalysis {
     }
 
     //7. Zwracającą tablicę chłopców, którzy mają nawyki palacza.
-    public Optional<Child[]> getMalesWhoHaveSmokes(){
-        if (children.isEmpty()) return Optional.empty();
+    public Child[] getSmokingBoys(){
+        if (children.isEmpty()) return new Child[0];
+
         List<Child> childrenOfOneSex = getChildrenOfOneSex(Sex.MALE);
         List<Child> malesSmokers = new ArrayList<>();
         for (Child tmp : childrenOfOneSex) {
@@ -102,7 +107,7 @@ public class ChildAnalysis {
         Child[] result = new Child[malesSmokers.size()];
         for (int i = 0; i < malesSmokers.size(); i++) {
             result[i] = malesSmokers.get(i);
-        }return Optional.of(result);
+        }return result;
     }
 
     private List<Child> getChildrenSmokers(List<Child> childrenOfOneSex) {
@@ -135,4 +140,27 @@ public class ChildAnalysis {
         }return childrenOfOneSex;
     }
 
+    private Child getTheOldestChild(){
+        Child theOldestChild = children.get(0);
+        int maxAge = theOldestChild.getAge();
+        for (Child child : children) {
+            int currentAge = child.getAge();
+            if (maxAge < currentAge){
+                theOldestChild = child;
+                maxAge = currentAge;
+            }
+        }return theOldestChild;
+    }
+
+    private Child getTheYoungestChild(){
+        Child theYoungestChild = children.get(0);
+        int minAge = theYoungestChild.getAge();
+        for (Child child : children) {
+            int currentAge = child.getAge();
+            if (minAge > currentAge){
+                theYoungestChild = child;
+                minAge = currentAge;
+            }
+        }return theYoungestChild;
+    }
 }
