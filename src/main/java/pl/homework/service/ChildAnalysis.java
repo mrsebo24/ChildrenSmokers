@@ -30,9 +30,9 @@ public class ChildAnalysis {
 
 
         /// theOldestChild
-        Child olderChild = children.stream().max(Comparator.comparing(Child::getAge)).get();
+        Child olderChild = getTheOldestChild();
         /// theYoungestChild
-        Child youngestChild = children.stream().min(Comparator.comparing(Child::getAge)).get();
+        Child youngestChild = getTheYoungestChild();
 
         return Optional.of("Youngest child: " + youngestChild + ", older child: " + olderChild);
     }
@@ -140,4 +140,27 @@ public class ChildAnalysis {
         }return childrenOfOneSex;
     }
 
+    private Child getTheOldestChild(){
+        Child theOldestChild = children.get(0);
+        int maxAge = theOldestChild.getAge();
+        for (Child child : children) {
+            int currentAge = child.getAge();
+            if (maxAge < currentAge){
+                theOldestChild = child;
+                maxAge = currentAge;
+            }
+        }return theOldestChild;
+    }
+
+    private Child getTheYoungestChild(){
+        Child theYoungestChild = children.get(0);
+        int minAge = theYoungestChild.getAge();
+        for (Child child : children) {
+            int currentAge = child.getAge();
+            if (minAge > currentAge){
+                theYoungestChild = child;
+                minAge = currentAge;
+            }
+        }return theYoungestChild;
+    }
 }
